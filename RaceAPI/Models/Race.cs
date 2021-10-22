@@ -11,7 +11,7 @@ namespace RaceAPI.Models
         public string Name { get; set; }
         public string Location { get; set; }
         public List<Participant> Participants { get; set; }
-        public Race(string name, string location, List<Participant> participants)
+        public Race(string name, string location, List<Participant> participants = null)
         {
             Id = Guid.NewGuid();
             Name = name;
