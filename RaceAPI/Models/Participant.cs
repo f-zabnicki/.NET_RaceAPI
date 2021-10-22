@@ -7,7 +7,7 @@ namespace RaceAPI.Models
 {
     public class Participant
     {
-        public Guid ParticipantId { get; set; }
+        public Guid ParticipantId { get; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public Result Result { get; set; }
@@ -31,9 +31,16 @@ namespace RaceAPI.Models
             int givenNumber = range.ElementAt(index);
             return givenNumber;
         }
-        public void UpdateDetails(Guid id, string name, string surname, Result result, bool payed)
+        public void UpdateDetails(string name, string surname, Result result, bool payed)
         {
-
+            Name = name;
+            Surname = surname;
+            Result = result;
+            Payed = payed;
+        }
+        public void UpdateResult(Result result)
+        {
+            Result = result;
         }
     }
 }

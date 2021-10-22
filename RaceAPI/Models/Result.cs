@@ -8,7 +8,12 @@ namespace RaceAPI.Models
 {
     public class Result
     {
-        Status Status { get; set; }
-        TimeSpan Time {get; set;} // The result of the race
+        public Status Status { get; set; }
+        public TimeSpan Time {get; set;} // The result of the race
+        public Result(Status status, TimeSpan time)
+        {
+            Status = status;
+            Time = time;
+        }
     }
 }
