@@ -12,7 +12,6 @@ namespace RaceAPI.Controllers
     public class ParticipantController : Controller
     {
         List<Participant> participantsDataBase = new List<Participant>();
-
         [HttpPost]
         public void UpdateParticipant()
         {

@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using RaceAPI.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RaceAPI.Controllers
 {
@@ -56,11 +54,28 @@ namespace RaceAPI.Controllers
             return racesDataBase.ToArray();
         }
 
+        /// <summary>
+        /// Add participant to race.
+        /// </summary>
+        /// <param name="id">Id od race.</param>
+        /// <param name="participant">Participant that need to be added to the race.</param>
         [HttpPost]
-        public void AddParticipantToRace(Guid id, Participant participant)
+        public void AddParticipantToRace(Guid raceID, Participant participant)
         {
-            Race race = racesDataBase.Find(o => o.Id == id);
+            Race race = racesDataBase.Find(o => o.Id == raceID);
             race.Participants.Add(participant);
+        }
+
+        /// <summary>
+        /// Get all participants of race.
+        /// </summary>
+        /// <param name="id">Id of the race.</param>
+        /// <returns></returns>
+        [HttpGet]
+        public Participant[] GetRaceParticipants(Guid id)
+        {
+            Race r = racesDataBase.Find(o => o.Id == id);
+            return r.Participants.ToArray();
         }
     }
 }

@@ -7,12 +7,12 @@ namespace RaceAPI.Models
 {
     public class Participant
     {
-        Guid ParticipantId { get; set; }
+        public Guid ParticipantId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public Result Result { get; set; }
         public Boolean Payed { get; set; }
-        int Number { get; set; } //Ranom Number from 0-1000 to be printed on the participant shirt.
+        public int Number { get; set; } //Ranom Number from 0-1000 to be printed on the participant shirt.
         HashSet<int> numbers = new HashSet<int>();
         Random rng = new Random();
         public Participant(string name, string surname, Result result, bool payed)
