@@ -7,10 +7,22 @@ namespace RaceAPI.Models
 {
     public class Race
     {
-        Guid Id { get; set; }
-        string Name { get; set; }
-        String Location { get; set; }
-        Participant[] Participants { get; set; }
+        public Guid Id { get; }
+        public string Name { get; set; }
+        public string Location { get; set; }
+        public List<Participant> Participants { get; set; }
+        public Race(string name, string location, List<Participant> participants)
+        {
+            Id = Guid.NewGuid();
+            Name = name;
+            Location = location;
+            Participants = participants;
+        }
+        public void ChangeRaceDetails(string name, string location, List<Participant> participants)
+        {
+            Name = name;
+            Location = location;
+            Participants = participants;
+        }
     }
-
 }
