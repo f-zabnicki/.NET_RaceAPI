@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31727.386
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RaceAPI", "RaceAPI.csproj", "{A8661E84-373B-4B07-A116-812F8F978485}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8661E84-373B-4B07-A116-812F8F978485}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8661E84-373B-4B07-A116-812F8F978485}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8661E84-373B-4B07-A116-812F8F978485}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8661E84-373B-4B07-A116-812F8F978485}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {682D6D59-B896-4A47-BEBD-3864D6D59F03}
+	EndGlobalSection
+EndGlobal
