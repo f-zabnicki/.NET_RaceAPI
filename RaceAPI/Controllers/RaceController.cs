@@ -14,7 +14,7 @@ namespace RaceAPI.Controllers
         /// <summary>
         /// Base of all created races
         /// </summary>
-        List<Race> racesDataBase = new List<Race>()
+        static List<Race> racesDataBase = new List<Race>()
                                     { 
                                         new Race("Race of Colombia", "Colombia",new List<Participant>() 
                                         { 

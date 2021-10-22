@@ -11,7 +11,7 @@ namespace RaceAPI.Controllers
     [Route("[controller]")]
     public class ParticipantController : Controller
     {
-        List<Participant> participantsDataBase = new List<Participant>();
+        static List<Participant> participantsDataBase = new List<Participant>();
 
         /// <summary>
         /// Update data details of particiapnt.
