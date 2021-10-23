@@ -22,12 +22,13 @@ namespace RaceAPI.Controllers
         /// <param name="result">New result of participant.</param>
         /// <param name="payed">New payment status of participant.</param>
         [HttpPost]
-        public void UpdateParticipant(Guid id, string name, string surname, Result result, bool payed)
+        public void UpdateParticipant(Participant participant)
         {
-            var toBeUpdated = participantsDataBase.Find(o => o.ParticipantId == id);
-            participantsDataBase.Remove(toBeUpdated);
-            toBeUpdated.UpdateDetails(name, surname, result, payed);
-            participantsDataBase.Add(toBeUpdated);
+            var toBeUpdated = participantsDataBase.Find(o => o.ParticipantId == participant.ParticipantId);
+            toBeUpdated.Name = participant.Name;
+            toBeUpdated.Surname = participant.Surname;
+            toBeUpdated.Result = participant.Result;
+            toBeUpdated.Payed = participant.Payed;
         }
 
         /// <summary>
@@ -47,12 +48,10 @@ namespace RaceAPI.Controllers
         /// <param name="id">Id od participant</param>
         /// <param name="result">New result</param>
         [HttpPost]
-        public void UpdateResultOfParticipant(Guid id, Result result)
+        public void UpdateResultOfParticipant(Participant participant)
         {
-            var toBeUpdated = participantsDataBase.Find(o => o.ParticipantId == id);
-            participantsDataBase.Remove(toBeUpdated);
-            toBeUpdated.UpdateResult(result);
-            participantsDataBase.Add(toBeUpdated);
+            var toBeUpdated = participantsDataBase.Find(o => o.ParticipantId == participant.ParticipantId);
+            toBeUpdated.Payed = participant.Payed;
         }
     }
 }

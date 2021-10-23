@@ -18,11 +18,5 @@ namespace RaceAPI.Models
             Location = location;
             Participants = participants;
         }
-        public void ChangeRaceDetails(string name, string location, List<Participant> participants)
-        {
-            Name = name;
-            Location = location;
-            Participants = participants;
-        }
     }
 }

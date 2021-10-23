@@ -47,12 +47,12 @@ namespace RaceAPI.Controllers
         /// <param name="participants">Set new participants of the race.</param>
         [HttpPost]
         [Route("update")]
-        public void UpdateRace(Guid id, string name, string location, List<Participant> participants)
+        public void UpdateRace(Race race)
         {
-            Race raceToUpdate = FindRace(id);
-            racesDataBase.Remove(raceToUpdate);
-            raceToUpdate.ChangeRaceDetails(name, location, participants);
-            racesDataBase.Add(raceToUpdate);
+            Race raceToUpdate = FindRace(race.Id);
+            raceToUpdate.Name = race.Name;
+            raceToUpdate.Location = race.Location;
+            raceToUpdate.Participants = race.Participants;
         }
 
         /// <summary>

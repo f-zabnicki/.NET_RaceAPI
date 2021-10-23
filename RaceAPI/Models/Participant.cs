@@ -31,16 +31,5 @@ namespace RaceAPI.Models
             int givenNumber = range.ElementAt(index);
             return givenNumber;
         }
-        public void UpdateDetails(string name, string surname, Result result, bool payed)
-        {
-            Name = name;
-            Surname = surname;
-            Result = result;
-            Payed = payed;
-        }
-        public void UpdateResult(Result result)
-        {
-            Result = result;
-        }
     }
 }
