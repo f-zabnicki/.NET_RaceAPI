@@ -1,35 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace RaceAPI.Models
 {
     public class Participant
     {
-        public Guid ParticipantId { get; }
+        [Key]
+        public Guid ID { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public Result Result { get; set; }
         public Boolean Payed { get; set; }
-        public int Number { get; set; } //Ranom Number from 0-1000 to be printed on the participant shirt.
-        HashSet<int> numbers = new HashSet<int>();
-        Random rng = new Random();
-        public Participant(string name, string surname, Result result, bool payed)
+        public int Number { get; set; } 
+        public Participant()
         {
-            ParticipantId = Guid.NewGuid();
-            Name = name;
-            Surname = surname;
-            Result = result;
-            Payed = payed;
-            Number = NumberAssigner();
-        }
-        private int NumberAssigner()
-        {
-            var range = Enumerable.Range(1, 1000).Where(i => !numbers.Contains(i));
-            int index = rng.Next(0, 1000 - numbers.Count);
-            int givenNumber = range.ElementAt(index);
-            return givenNumber;
+            ID = Guid.NewGuid();
+            Payed = false;
         }
     }
 }

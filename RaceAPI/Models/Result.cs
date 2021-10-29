@@ -1,19 +1,14 @@
 ﻿using RaceAPI.Data;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace RaceAPI.Models
 {
     public class Result
     {
+        [Key]
+        public int ID { get; set; }
         public Status Status { get; set; }
-        public TimeSpan Time {get; set;} // The result of the race
-        public Result(Status status, TimeSpan time)
-        {
-            Status = status;
-            Time = time;
-        }
+        public TimeSpan Time {get; set;}
     }
 }

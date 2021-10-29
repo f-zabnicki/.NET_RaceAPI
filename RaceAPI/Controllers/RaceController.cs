@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RaceAPI.Models;
+using RaceAPI.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,30 +13,20 @@ namespace RaceAPI.Controllers
     public class RaceController : ControllerBase
     {
         /// <summary>
-        /// Base of all created races
-        /// </summary>
-        static List<Race> racesDataBase = new List<Race>()
-                                    { 
-                                        new Race("Race of Colombia", "Colombia",new List<Participant>() 
-                                        { 
-                                            new Participant("Bob", "Smith", new Result(Data.Status.COMPLETED, new TimeSpan(3,40,34)), true),
-                                            new Participant("Will", "Brown", new Result(Data.Status.COMPLETED, new TimeSpan(2,50,14)), true),
-                                            new Participant("Andrew", "White", new Result(Data.Status.COMPLETED, new TimeSpan(3,12,58)), true)
-                                        })
-                                    };
-
-        /// <summary>
         /// Method used to create new Race.
         /// </summary>
         /// <param name="name">Set name of the race.</param>
         /// <param name="location">Set location of the race.</param>
         /// <param name="participants">Set participants of the race.</param>
         [HttpPut]
-        [Route("add")]
-        public void CreateRace(string name, string location, List<Participant> participants )
+        public ActionResult CreateRace(string name, string location, List<Participant> participants = null )
         {
-            Race createdRace = new Race(name, location, participants);
-            racesDataBase.Add(createdRace);
+            using(var context = new RaceDBContext())
+            {
+                context.Races.Add(new Race() { Name = name, Location = location, Participants = participants });
+                context.SaveChanges();
+                return Ok();
+            }
         }
 
         /// <summary>
@@ -46,13 +37,21 @@ namespace RaceAPI.Controllers
         /// <param name="location">Set new location of the race.</param>
         /// <param name="participants">Set new participants of the race.</param>
         [HttpPost]
-        [Route("update")]
-        public void UpdateRace(Race race)
+        public ActionResult UpdateRace(Race race)
         {
-            Race raceToUpdate = FindRace(race.Id);
-            raceToUpdate.Name = race.Name;
-            raceToUpdate.Location = race.Location;
-            raceToUpdate.Participants = race.Participants;
+            using (var context = new RaceDBContext())
+            {
+                var toBeUpdated = context.Races.FirstOrDefault(r => r.ID == race.ID);
+                if (toBeUpdated == null)
+                {
+                    return NotFound();
+                }
+                toBeUpdated.Name = race.Name;
+                toBeUpdated.Location = race.Location;
+                toBeUpdated.Participants = race.Participants;
+                context.SaveChanges();
+                return Ok();
+            }
         }
 
         /// <summary>
@@ -60,50 +59,12 @@ namespace RaceAPI.Controllers
         /// </summary>
         /// <returns>Return array of all races.</returns>
         [HttpGet]
-        [Route("get")]
         public Race[] GetRaces()
         {
-            return racesDataBase.ToArray();
-        }
-
-        /// <summary>
-        /// Add participant to race.
-        /// </summary>
-        /// <param name="id">Id od race.</param>
-        /// <param name="participant">Participant that need to be added to the race.</param>
-        [HttpPost]
-        [Route("add/participant")]
-        public void AddParticipantToRace(Guid raceID, Participant participant)
-        {
-            Race race = FindRace(raceID);
-            race.Participants.Add(participant);
-        }
-
-        /// <summary>
-        /// Get all participants of race.
-        /// </summary>
-        /// <param name="id">Id of the race.</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("get/participant")]
-        public Participant[] GetRaceParticipants(Guid id)
-        {
-            Race r = FindRace(id);
-            return r.Participants.ToArray();
-        }
-
-        /// <summary>
-        /// Deleate participant from the race
-        /// </summary>
-        /// <param name="raceID">Id of race.</param>
-        /// <param name="participantID">Id of participant that need to be removed.</param>
-        [HttpDelete]
-        [Route("delete/participant")]
-        public void DeleateRaceParticipant(Guid raceID, Guid participantID)
-        {
-            Race race = FindRace(raceID);
-            var toBeRemoved = race.Participants.Find(o=> o.ParticipantId == participantID);
-            race.Participants.Remove(toBeRemoved);
+            using (var context = new RaceDBContext())
+            {
+                return context.Races.ToArray();
+            }
         }
 
         /// <summary>
@@ -114,13 +75,15 @@ namespace RaceAPI.Controllers
         [HttpGet]
         public IEnumerable<Participant> GetRaceTime(Guid id)
         {
-            Race race = FindRace(id);
-            return race.Participants.OrderBy(o => o.Result.Time);
-        }
-        [Route("get")]
-        private Race FindRace(Guid raceId)
-        {
-            return racesDataBase.Find(o => o.Id == raceId);
+            using (var context = new RaceDBContext())
+            {
+                var race = context.Races.FirstOrDefault(r=> r.ID == id);
+                if (race == null)
+                {
+                    throw new KeyNotFoundException("Invalid ID.");
+                }
+                return race.Participants.OrderBy(o => o.Result.Time);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RaceAPI.Models;
+using RaceAPI.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,24 +12,44 @@ namespace RaceAPI.Controllers
     [Route("[controller]")]
     public class ParticipantController : Controller
     {
-        static List<Participant> participantsDataBase = new List<Participant>();
-
         /// <summary>
         /// Update data details of particiapnt.
         /// </summary>
-        /// <param name="id">Id of participant.</param>
-        /// <param name="name">New name of participant.</param>
-        /// <param name="surname">New surname of participant.</param>
-        /// <param name="result">New result of participant.</param>
-        /// <param name="payed">New payment status of participant.</param>
         [HttpPost]
-        public void UpdateParticipant(Participant participant)
+        public ActionResult UpdateParticipant(Participant participant)
         {
-            var toBeUpdated = participantsDataBase.Find(o => o.ParticipantId == participant.ParticipantId);
-            toBeUpdated.Name = participant.Name;
-            toBeUpdated.Surname = participant.Surname;
-            toBeUpdated.Result = participant.Result;
-            toBeUpdated.Payed = participant.Payed;
+            using(var context = new RaceDBContext())
+            {
+                var toBeUpdated = context.Participants.FirstOrDefault(p => p.ID == participant.ID);
+                if (toBeUpdated == null)
+                {
+                    return NotFound();
+                }
+                toBeUpdated.Name = participant.Name;
+                toBeUpdated.Surname = participant.Surname;
+                toBeUpdated.Result = participant.Result;
+                context.SaveChanges();
+                return Ok();
+            }
+        }
+
+        /// <summary>
+        /// Add participant.
+        /// </summary>
+        [HttpPut]
+        public ActionResult AddParticipant(Participant participant)
+        {
+            using (var context = new RaceDBContext())
+            {
+                if (participant == null)
+                {
+                    return NotFound();
+                }
+                participant.Number = NumberAssigner();
+                context.Participants.Add(participant);
+                context.SaveChanges();
+                return Ok();
+            }
         }
 
         /// <summary>
@@ -36,22 +57,56 @@ namespace RaceAPI.Controllers
         /// </summary>
         /// <param name="id">Id of participant.</param>
         [HttpPost]
-        public void ChangePaymentStatus(Guid id)
+        [Route("payment")]
+        public ActionResult ChangePaymentStatus(Guid id)
         {
-            var p = participantsDataBase.Find(o => o.ParticipantId == id);
-            p.Payed = !p.Payed;
+            using (var context = new RaceDBContext())
+            {
+                var toBeUpdated = context.Participants.FirstOrDefault(p => p.ID == id);
+                if (toBeUpdated == null)
+                {
+                    return NotFound();
+                }
+                toBeUpdated.Payed = !toBeUpdated.Payed;
+                context.SaveChanges();
+                return Ok();
+            }
         }
 
         /// <summary>
         /// Update result of participant
         /// </summary>
-        /// <param name="id">Id od participant</param>
-        /// <param name="result">New result</param>
         [HttpPost]
-        public void UpdateResultOfParticipant(Participant participant)
+        [Route("result")]
+        public ActionResult UpdateResultOfParticipant(Participant participant)
         {
-            var toBeUpdated = participantsDataBase.Find(o => o.ParticipantId == participant.ParticipantId);
-            toBeUpdated.Payed = participant.Payed;
+            using (var context = new RaceDBContext())
+            {
+                var toBeUpdated = context.Participants.FirstOrDefault(p => p.ID == participant.ID);
+                if (toBeUpdated == null)
+                {
+                    return NotFound();
+                }
+                toBeUpdated.Result = participant.Result;
+                context.SaveChanges();
+                return Ok();
+            }
+        }
+        private int NumberAssigner()
+        {
+            HashSet<int> numbers = new HashSet<int>();
+            using (var context = new RaceDBContext())
+            {
+                foreach (var item in context.Participants)
+                {
+                    numbers.Add(item.Number);
+                }
+                var rng = new Random();
+                var range = Enumerable.Range(1, 1000).Where(n => !numbers.Contains(n));
+                int index = rng.Next(0, 1000 - context.Participants.Count());
+                int givenNumber = range.ElementAt(index);
+                return givenNumber;
+            }
         }
     }
 }

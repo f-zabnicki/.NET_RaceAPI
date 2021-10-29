@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace RaceAPI.Models
 {
     public class Race
     {
-        public Guid Id { get; }
+        [Key]
+        public Guid ID { get; set; }
         public string Name { get; set; }
         public string Location { get; set; }
         public List<Participant> Participants { get; set; }
-        public Race(string name, string location, List<Participant> participants = null)
+        public Race()
         {
-            Id = Guid.NewGuid();
-            Name = name;
-            Location = location;
-            Participants = participants;
+            ID = Guid.NewGuid();
         }
     }
 }
